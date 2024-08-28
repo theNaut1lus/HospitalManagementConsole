@@ -44,11 +44,11 @@ namespace HospitalManagementConsole
                 {
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
-                        MyDetails();
+                        ListDetails();
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
-                        MyPatients();
+                        ListAssignedPatients();
                         break;
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
@@ -85,29 +85,95 @@ namespace HospitalManagementConsole
             Console.ReadKey();
         }
 
-        public void MyDetails()
+        public void ListDetails()
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│              My Details              │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.WriteLine();
+
+            string[] labels = { "Name", "Email Address", "Phone", "Address" };
+            string headers = $"{labels[0],-20} | {labels[1],-20} | {labels[2],-10} | {labels[3],-20}";
+            // Divider matches the length of the headers
+            string divider = new('─', headers.Length + 20);
+            Console.WriteLine(headers);
+            Console.WriteLine(divider);
+
+            Console.WriteLine(this);
+            Console.ReadKey();
+            Menu();
         }
 
-        public void MyPatients()
+        public void ListAssignedPatients()
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│              My Patients             │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.WriteLine();
+            Console.WriteLine($"Patients assigned to {fullName}");
+            Console.WriteLine();
+
+            string[] labels = { "Name", "Doctor", "Email Address", "Phone", "Address" };
+
+            //TODO: Get all patients assigned to this doctor, null if no assigned.
         }
 
         public void ListAppointments()
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│           All Appointments           │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.WriteLine();
+
+            string[] labels = { "Doctor", "Patient", "Description" };
+            //[TODO] : 
         }
 
         public void CheckParticularPatient()
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│         Check Patient Details        │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.WriteLine();
+            Console.Write("Enter the ID of the patient to check: ");
+            //[TODO] : Patient search
         }
 
         public void ListAppointmentsWIthPatient()
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│           Appointment With           │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+
+            Console.WriteLine();
+            Console.Write("Enter the ID of the patient you would like to view appointments for: ");
+
+            //[TODO] : Appointment search
         }
 
     }

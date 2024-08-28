@@ -10,7 +10,7 @@ namespace HospitalManagementConsole
     {
         private string address, email, phone;
 
-        public Doctor(string address, string email, string phone, string id, string password, string fullname, string role) : base(id, password, fullname, role)
+        public Administrator(string address, string email, string phone, string id, string password, string fullname, string role) : base(id, password, fullname, role)
         {
             this.address = address;
             this.email = email;
@@ -24,12 +24,12 @@ namespace HospitalManagementConsole
             Console.WriteLine("│                                      │");
             Console.WriteLine("│   DOTNET Hospital Managment System   │");
             Console.WriteLine("│──────────────────────────────────────│");
-            Console.WriteLine("│             Doctor Menu              │");
+            Console.WriteLine("│             Administrator Menu       │");
             Console.WriteLine("│                                      │");
             Console.WriteLine("└──────────────────────────────────────┘");
             Console.WriteLine();
 
-            Console.WriteLine($"Welcome to DOTNET Hospital Managment System {fullname}");
+            Console.WriteLine($"Welcome to DOTNET Hospital Managment System {fullName}");
             Console.WriteLine();
             Console.WriteLine("Please choose an option:");
             foreach (string option in options)
@@ -44,7 +44,7 @@ namespace HospitalManagementConsole
                 {
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
-                        ListDoctors();
+                        ListAllDoctors();
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
@@ -52,7 +52,7 @@ namespace HospitalManagementConsole
                         break;
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
-                        ListPatients();
+                        ListAllPatients();
                         break;
                     case ConsoleKey.D4:
                     case ConsoleKey.NumPad4:
@@ -89,34 +89,112 @@ namespace HospitalManagementConsole
             Console.ReadKey();
         }
 
-        public void ListDoctors()
+        public void ListAllDoctors()
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│              All Doctors             │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.WriteLine();
+
+            Console.WriteLine("All doctors registered to the DOTNET Hospital Management System");
+            Console.WriteLine();
+
+            string[] labels = { "Name", "Email Address", "Phone", "Address" };
+            //[TODO] " List all doctors
         }
 
         public void CheckParticularDoctor()
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│             Doctor Details           │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.WriteLine();
+
+            Console.WriteLine("Please enter the ID of the doctor who's details you are checking. Or press n to return to menu");
+            //[TODO]: Search and display a doctor
         }
 
-        public void ListPatients()
+        public void ListAllPatients()
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│              All Patients            │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.WriteLine();
+
+            Console.WriteLine("All patients registered to the DOTNET Hospital Management System");
+            Console.WriteLine();
+
+            string[] labels = { "Name", "Doctor", "Email Address", "Phone", "Address" };
+
+            //[TODO] : List all patients
         }
 
         public void CheckParticularPatient() 
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│            Patient Details           │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.WriteLine();
+
+            Console.WriteLine("Please enter the ID of the patient who's details you are checking. Or press n to return to menu");
+
+            //[TODO] : Search and display a patient
         }
 
         public void AddDoctor()
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│              Add Doctor              │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.WriteLine();
+
+            Console.WriteLine("Registering a new doctor with the DOTNET Hospital Management System");
+            Console.WriteLine();
+
+            //[TODO] : Add a doctor
         }
 
         public void AddPatient()
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│              Add Patient             │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.WriteLine();
+
+            Console.WriteLine("Registering a new patient with the DOTNET Hospital Management System");
+            Console.WriteLine();
+
+            //[TODO] : Add a patient
         }
     }
 }

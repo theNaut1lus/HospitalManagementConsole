@@ -10,6 +10,7 @@ namespace HospitalManagementConsole
     internal class Patient : User
     {
         private string address, email, phone;
+        private Doctor? assignedDoctor;
 
         public Patient(string address, string email, string phone, string id, string password, string fullname, string role) : base(id, password, fullname, role)
         {
@@ -30,7 +31,7 @@ namespace HospitalManagementConsole
             Console.WriteLine("└──────────────────────────────────────┘");
             Console.WriteLine();
 
-            Console.WriteLine($"Welcome to DOTNET Hospital Managment System {fullname}");
+            Console.WriteLine($"Welcome to DOTNET Hospital Managment System {fullName}");
             Console.WriteLine();
             Console.WriteLine("Please choose an option:");
             foreach (string option in options)
@@ -45,15 +46,15 @@ namespace HospitalManagementConsole
                 {
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
-                        MyDetails();
+                        ListDetails();
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
-                        MyDoctor();
+                        ListAssignedDoctor();
                         break;
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
-                        MyAppointment();
+                        ListAppointments();
                         break;
                     case ConsoleKey.D4:
                     case ConsoleKey.NumPad4:
@@ -82,24 +83,73 @@ namespace HospitalManagementConsole
             Console.ReadKey();
         }
 
-        public void MyDetails()
+        public void ListDetails()
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│              My Details              │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.WriteLine();
+            Console.WriteLine($"{fullName}'s Details");
+            Console.WriteLine();
+            Console.WriteLine($"Patient ID: {id}\nFull Name: {fullName}\nAddress: {address}\nEmail: {email}\nPhone: {phone}");
+            Console.ReadKey();
+            Menu();
         }
 
-        public void MyDoctor()
+        public void ListAssignedDoctor()
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│               My Doctor              │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.WriteLine();
+            Console.WriteLine("Your doctor:");
+            Console.WriteLine();
+
+            //[TODO]: List assigned doctor or null if no doc assigned.
         }
 
-        public void MyAppointment()
+        public void ListAppointments()
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│            My Appointment            │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.WriteLine();
+            Console.WriteLine($"Appointment for {fullName}");
+            Console.WriteLine();
+
+            //[TODO]: List booking appointments
         }
 
         public void BookAppointment()
         {
-            //[TODO]
+            Console.Clear();
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│            Book Appointment          │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+
+            //[TODO]: Create booking system
+
+            Console.ReadKey();
+            Menu();
         }
 
 
