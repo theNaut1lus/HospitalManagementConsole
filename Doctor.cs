@@ -29,7 +29,7 @@ namespace HospitalManagementConsole
             Console.WriteLine("└──────────────────────────────────────┘");
             Console.WriteLine();
 
-            Console.WriteLine($"Welcome to DOTNET Hospital Managment System {fullname}");
+            Console.WriteLine($"Welcome to DOTNET Hospital Managment System {fullName}");
             Console.WriteLine();
             Console.WriteLine("Please choose an option:");
             foreach (string option in options)

@@ -10,12 +10,12 @@ namespace HospitalManagementConsole
     {
         public static string GetFileData(T userObject)
         {
-
+            return userObject.ToString();
         }
 
         public static string SetFileData(T userObject)
         {
-
+            return userObject.ToString();
         }
 
       

@@ -1,7 +1,7 @@
 {
-  "patients": [
+  "doctors": [
     {
-      "id": "12345",
+      "id": "13579",
       "password": "password",
       "fullname": "John Doctorson",
       "address": "20 Real Street, Sydney NSW 2007",
@@ -9,7 +9,7 @@
       "phone": "0477777777"
     },
     {
-      "id": "34512",
+      "id": "97531",
       "password": "password",
       "fullname": "Adam Doctorson",
       "address": "20 Fake Street, Sydney NSW 2029",
