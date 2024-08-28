@@ -24,11 +24,11 @@ namespace HospitalManagementConsole
             Console.Write("ID: ");
             id = Console.ReadLine() ?? "";
             Console.Write("Password: ");
-            password = EnterAndStorePassword();
+            password = EnterPassword();
             Console.WriteLine("{0} {1}", id, password); //temp
         }
 
-        private static string EnterAndStorePassword()
+        private static string EnterPassword()
         {
             string password = "";
             ConsoleKey key;
