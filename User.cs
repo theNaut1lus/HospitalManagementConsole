@@ -8,7 +8,7 @@ namespace HospitalManagementConsole
 {
     public abstract class User
     {
-        public string id, password, fullame, role;
+        public string id, password, fullname, role;
         public string[] options = Array.Empty<string>();
 
         public User(string id, string password, string fullname, string role)

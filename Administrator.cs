@@ -104,6 +104,11 @@ namespace HospitalManagementConsole
             //[TODO]
         }
 
+        public void CheckParticularPatient() 
+        {
+            //[TODO]
+        }
+
         public void AddDoctor()
         {
             //[TODO]
