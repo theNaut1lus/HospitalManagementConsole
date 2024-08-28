@@ -8,5 +8,46 @@ namespace HospitalManagementConsole
 {
     internal class Login
     {
+        private string id, password;
+
+        public void LoginMenu()
+        {
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("│   DOTNET Hospital Managment System   │");
+            Console.WriteLine("│──────────────────────────────────────│");
+            Console.WriteLine("│                LOGIN                 │");
+            Console.WriteLine("│                                      │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.WriteLine();
+
+            Console.Write("ID: ");
+            id = Console.ReadLine() ?? "";
+            Console.Write("Password: ");
+            password = EnterAndStorePassword();
+            Console.WriteLine("{0} {1}", id, password); //temp
+        }
+
+        private static string EnterAndStorePassword()
+        {
+            string password = "";
+            ConsoleKey key;
+            do
+            {
+                var keyInfo = Console.ReadKey(intercept: true);
+                key = keyInfo.Key;
+                if (key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    Console.Write("\b \b");
+                    password = password[0..^1];
+                }
+                else if (!char.IsControl(keyInfo.KeyChar))
+                {
+                    Console.Write("*");
+                    password += keyInfo.KeyChar;
+                }
+            } while (key != ConsoleKey.Enter);
+            return password;
+        }
     }
 }
