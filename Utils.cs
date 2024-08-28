@@ -6,7 +6,18 @@ using System.Threading.Tasks;
 
 namespace HospitalManagementConsole
 {
-    internal class Utils
+    internal static class Utils<T>
     {
+        public static string GetFileData(T userObject)
+        {
+
+        }
+
+        public static string SetFileData(T userObject)
+        {
+
+        }
+
+      
     }
 }

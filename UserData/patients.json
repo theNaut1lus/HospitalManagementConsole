@@ -1,0 +1,20 @@
+{
+	"patients": [
+		{
+			"id": "12345",
+			"password": "password",
+			"fullname": "John Patientson",
+			"address": "20 Real Street, Sydney NSW 2007",
+			"email": "johnp89@gmail.com",
+			"phone": "0477777777"
+		},
+		{
+			"id": "34512",
+			"password": "password",
+			"fullname": "Adam Patientson",
+			"address": "20 Fake Street, Sydney NSW 2029",
+			"email": "adamp91@gmail.com",
+			"phone": "0420922001"
+		}
+	]
+}

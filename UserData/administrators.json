@@ -1,0 +1,20 @@
+{
+  "administrators": [
+    {
+      "id": "12345",
+      "password": "password",
+      "fullname": "John Adminson",
+      "address": "20 Real Street, Sydney NSW 2007",
+      "email": "johna89@gmail.com",
+      "phone": "0477777777"
+    },
+    {
+      "id": "34512",
+      "password": "password",
+      "fullname": "Adam Adminson",
+      "address": "20 Fake Street, Sydney NSW 2029",
+      "email": "adama91@gmail.com",
+      "phone": "0420922001"
+    }
+  ]
+}
