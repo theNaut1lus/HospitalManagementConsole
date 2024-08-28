@@ -19,5 +19,7 @@ namespace HospitalManagementConsole
             this.role = role;
         }
 
+        public abstract void Menu();
+
     }
 }
