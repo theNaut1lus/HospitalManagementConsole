@@ -11,15 +11,15 @@ namespace HospitalManagementConsole
         private string address, email, phone;
 
         //Doctor constructor
-        public Doctor(string address, string email, string phone, string id, string password, string fullname, string role) : base(id, password, fullname, role)
+        public Doctor(string id, string password, string fullName, string address, string email, string phone, string role) : base(id, password, fullName, role)
         {
             this.address = address;
             this.email = email;
             this.phone = phone;
         }
 
-        //Doctor Details method
-        public void Details()
+            //Doctor Details method
+            public void Details()
         {
             Console.Clear();
             Console.WriteLine("┌──────────────────────────────────────┐");
@@ -192,6 +192,11 @@ namespace HospitalManagementConsole
                 Menu();
             }
             Console.ReadKey();
+        }
+
+        public override string ToString()
+        {
+            return $"{fullName,-20} | {email,-20} | {phone,-5} | {address,-20}";
         }
 
     }

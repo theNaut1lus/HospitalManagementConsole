@@ -12,7 +12,7 @@ namespace HospitalManagementConsole
         private string address, email, phone;
 
         //Patient constructor
-        public Patient(string address, string email, string phone, string id, string password, string fullname, string role) : base(id, password, fullname, role)
+        public Patient(string id, string password, string fullName, string address, string email, string phone, string role) : base(id, password, fullName, role)
         {
             this.address = address;
             this.email = email;
@@ -33,6 +33,7 @@ namespace HospitalManagementConsole
             Console.WriteLine();
             Console.WriteLine($"{fullName}'s Details");
             Console.WriteLine();
+            //Simple display of patient details as per assignment specs: therefore no extra processing
             Console.WriteLine($"Patient ID: {id}\nFull Name: {fullName}\nAddress: {address}\nEmail: {email}\nPhone: {phone}");
             Console.ReadKey();
             Menu();
@@ -53,8 +54,43 @@ namespace HospitalManagementConsole
             Console.WriteLine("Your doctor:");
             Console.WriteLine();
 
-            string[] labels = { "Name", "Email Address", "Phone", "Address" };
-            
+            //additional processing required to format into table as per specifications
+            string[] labelNames = { "Name", "Email Address", "Phone", "Address" };
+            // Table header string with custom padding to acheive uniform borders
+            string tableHeaders = $"{labelNames[0],-20} | {labelNames[1],-20} | {labelNames[2],-10} | {labelNames[3],-20}";
+            // Anonymous function: set a divider that will match the length of the headers
+            string divider = new('─', tableHeaders.Length + 20);
+            Console.WriteLine(tableHeaders);
+            Console.WriteLine(divider);
+            //Find and display the doctor assigned to the patient using patient's own ID
+
+            if(File.Exists($"DB\\Patients\\RegisteredDoctors\\{id}.txt"))
+            {
+                //possble that a patient may not have a doctor assigned, so we need a separate directory containing the patient that has an assigned doctor's id
+                string assignedDoctorID = File.ReadAllText($"DB\\Patients\\RegisteredDoctors\\{id}.txt");
+                //only 1 doctor can be assigned to a patient, so will contain just the 1 doctor ID
+                if (File.Exists($"DB\\Doctors\\{assignedDoctorID}.txt"))
+                {
+                    string doctorFile = File.ReadAllText($"DB\\Doctors\\{assignedDoctorID}.txt");
+                    string[] doctorData = doctorFile.Split(';');
+                    Doctor d = new Doctor(doctorData[0], doctorData[1], doctorData[2], doctorData[3], doctorData[4], doctorData[5], "Doctor");
+                    Console.WriteLine(d);
+                }
+                else
+                {
+                    Console.WriteLine("No doctor assigned");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Patient not found");
+            }
+
+
+
+            Console.ReadKey();
+            Menu();
+
 
             //[TODO]: List assigned doctor or null if no doc assigned.
         }
