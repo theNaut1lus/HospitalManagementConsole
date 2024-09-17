@@ -50,6 +50,7 @@ namespace HospitalManagementConsole
                     password += keyInfo.KeyChar;
                 }
             } while (key != ConsoleKey.Enter);
+            Console.WriteLine();
             return password;
         }
 
@@ -62,15 +63,15 @@ namespace HospitalManagementConsole
                 string file = $"{id}.txt";
 
                 // Check if the file will exist in any of the 3 directories, if file exists, then checks credentials
-                if (File.Exists($"Administrators\\{file}"))
+                if (File.Exists($"DB\\Administrators\\{file}"))
                 {
                     CredCheck("Administrators", file);
                 }
-                else if (File.Exists($"Doctors\\{file}"))
+                else if (File.Exists($"DB\\Doctors\\{file}"))
                 {
                     CredCheck("Doctors", file);
                 }
-                else if (File.Exists($"Patients\\{file}"))
+                else if (File.Exists($"DB\\Patients\\{file}"))
                 {
                     CredCheck("Patients", file);
                 }
@@ -111,7 +112,7 @@ namespace HospitalManagementConsole
         private void CredCheck(string role, string file)
         {
             // Read the file
-            string[] lines = File.ReadAllLines($"{role}\\{file}");
+            string[] lines = File.ReadAllLines($"DB\\{role}\\{file}");
             string[] details = lines[0].Split(';');
 
             // Another check for id and then subsequent password check.
