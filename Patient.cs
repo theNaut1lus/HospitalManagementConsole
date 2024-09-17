@@ -314,15 +314,18 @@ namespace HospitalManagementConsole
         public override string ToString()
         {
             string doctorName = "";
-            if (File.Exists($"Patients\\RegisteredDoctors\\{id}.txt"))
+            if (File.Exists($"DB\\Patients\\RegisteredDoctors\\{id}.txt"))
             {
-                // Get the registered doctor
-                string[] registeredDoctor = File.ReadAllLines($"Patients\\RegisteredDoctors\\{id}.txt");
-                string[] doctor = File.ReadAllLines($"Doctors\\{registeredDoctor[0]}.txt");
+                // Get the registered doctor using the patient's ID from the RegisteredDoctors directory
+                string registeredDoctor = File.ReadAllText($"DB\\Patients\\RegisteredDoctors\\{id}.txt");
+                string[] doctor = File.ReadAllLines($"DB\\Doctors\\{registeredDoctor}.txt");
                 doctorName = doctor[0].Split(';')[2];
+                return $"{fullName,-20} | {doctorName,-20} | {email,-20} | {phone,-5} | {address,-20}";
             }
-
-            return $"{fullName,-20} | {doctorName,-20} | {email,-20} | {phone,-5} | {address,-20}";
+            else
+            {
+                return $"{fullName,-20} | {email,-20} | {phone,-5} | {address,-20}";
+            }
         }
 
 
