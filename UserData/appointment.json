@@ -1,9 +1,0 @@
-{
-  "appointments": [
-    {
-      "doctor": "12345",
-      "patient": "13579",
-      "description": "Feeling sick"
-    }
-  ]
-}
