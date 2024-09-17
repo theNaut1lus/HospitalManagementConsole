@@ -198,6 +198,6 @@ namespace HospitalManagementConsole
             Console.ReadKey();
         }
 
-        
+
     }
 }
