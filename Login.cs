@@ -83,12 +83,14 @@ namespace HospitalManagementConsole
             {
                 switch (e.Message)
                 {
+                    //thrown from CredCheck function
                     case "Invalid password, press any key to try again":
                         Console.WriteLine(e.Message);
                         Console.ReadKey();
                         Console.Clear();
                         LoginMenu();
                         break;
+                    //thrown from HandleLogin's try block above
                     case "Invalid ID or account user doesn't exist, press any key to try again":
                         Console.WriteLine(e.Message);
                         Console.ReadKey();
@@ -105,18 +107,20 @@ namespace HospitalManagementConsole
             }
         }
 
+        // Check the credentials if id file exists in any of the directories
         private void CredCheck(string role, string file)
         {
             // Read the file
             string[] lines = File.ReadAllLines($"{role}\\{file}");
             string[] details = lines[0].Split(';');
 
-            // Check if the id and password is correct
+            // Another check for id and then subsequent password check.
             if (id == details[0] && password == details[1])
             {
                 Console.WriteLine("Valid Credentials");
                 Console.ReadKey();
 
+                //Initiate the respective class based on the role of the user
                 switch (role)
                 {
                     case "Patients":
@@ -137,6 +141,7 @@ namespace HospitalManagementConsole
             }
             else
             {
+                //if functon call wrapped in a try-catch, thrown to try of calling parent function.
                 throw new Exception("\nInvalid password, press any key to try again");
             }
         }

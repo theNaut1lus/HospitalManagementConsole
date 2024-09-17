@@ -15,7 +15,6 @@ namespace HospitalManagementConsole
             this.address = address;
             this.email = email;
             this.phone = phone;
-            this.role = "Doctor";
         }
 
         public override void Menu()

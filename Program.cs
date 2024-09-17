@@ -1,8 +1,8 @@
 ﻿namespace HospitalManagementConsole
 {
-    internal class Program
+    class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Login login = new Login();
             login.LoginMenu();
