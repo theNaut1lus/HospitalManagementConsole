@@ -62,9 +62,9 @@ namespace HospitalManagementConsole
             string divider = new('─', tableHeaders.Length + 20);
             Console.WriteLine(tableHeaders);
             Console.WriteLine(divider);
-            //Find and display the doctor assigned to the patient using patient's own ID
 
-            if(File.Exists($"DB\\Patients\\RegisteredDoctors\\{id}.txt"))
+            //Find and display the doctor assigned to the patient using patient's own ID
+            if (File.Exists($"DB\\Patients\\RegisteredDoctors\\{id}.txt"))
             {
                 //possble that a patient may not have a doctor assigned, so we need a separate directory containing the patient that has an assigned doctor's id
                 string assignedDoctorID = File.ReadAllText($"DB\\Patients\\RegisteredDoctors\\{id}.txt");
@@ -85,14 +85,8 @@ namespace HospitalManagementConsole
             {
                 Console.WriteLine("Patient not found");
             }
-
-
-
             Console.ReadKey();
             Menu();
-
-
-            //[TODO]: List assigned doctor or null if no doc assigned.
         }
 
         //List Appointments method
@@ -110,7 +104,30 @@ namespace HospitalManagementConsole
             Console.WriteLine($"Appointment for {fullName}");
             Console.WriteLine();
 
-            //[TODO]: List all appointments
+            string[] labelNames = { "Doctor", "Patient", "Description" };
+            // Table header string with custom padding to acheive uniform borders
+            string tableHeaders = $"{labelNames[0],-20} | {labelNames[1],-20} | {labelNames[2],-10}";
+            // Anonymous function: set a divider that will match the length of the headers
+            string divider = new('─', tableHeaders.Length + 20);
+            Console.WriteLine(tableHeaders);
+            Console.WriteLine(divider);
+
+            if (File.Exists($"DB\\Appointments\\Patients\\{id}.txt"))
+            {
+                string[] appointments = File.ReadAllLines($"DB\\Appointments\\Patients\\{id}.txt");
+                foreach (string appointment in appointments)
+                {
+                    string[] appointmentData = appointment.Split('|');
+                    Appointment a = new Appointment(appointmentData[0], appointmentData[1], appointmentData[2]);
+                    Console.WriteLine(a);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No appointments found");
+            }
+            Console.ReadKey();
+            Menu();
         }
 
         //Book Appointment method
@@ -126,6 +143,7 @@ namespace HospitalManagementConsole
             Console.WriteLine("└──────────────────────────────────────┘");
 
             //[TODO]: Create booking system
+            CreateBooking();
 
             Console.ReadKey();
             Menu();
@@ -133,7 +151,94 @@ namespace HospitalManagementConsole
 
         public void CreateBooking()
         {
-            //[TODO]: Create booking system
+            Console.Clear();
+            //Check if patient has a doctor assigned, within RegisteredDoctors directory
+            if (File.Exists($"DB\\Patients\\RegisteredDoctors\\{id}.txt"))
+            {
+                string doctorID = File.ReadAllText($"DB\\Patients\\RegisteredDoctors\\{id}.txt");
+
+                //lookup for doctor using the doctorID
+                string doctorFile = File.ReadAllText($"DB\\Doctors\\{doctorID}.txt");
+                string[] doctorData = doctorFile.Split(';');
+
+                Console.WriteLine();
+                Console.WriteLine($"Booking an appointment with Dr. {doctorData[2]}");
+                Console.Write("Description of the appointment: ");
+                string description = Console.ReadLine() ?? "";
+
+                if (string.IsNullOrEmpty(description))
+                {
+                    Console.WriteLine("Description cannot be empty, press any key to try again");
+                    Console.ReadKey();
+                    BookAppointment();
+                }
+
+                // Check if the patient/doctor already has an appointment with this doctor/patient => Append a new appointment to the file on a new line
+                if (File.Exists($"DB\\Appointments\\Patients\\{id}.txt") && File.Exists($"DB\\Appointments\\Doctors\\{doctorID}.txt"))
+                {
+                    File.AppendAllText($"DB\\Appointments\\Patients\\{id}.txt", $"{doctorID}|{id}|{description}\n");
+                    File.AppendAllText($"DB\\Appointments\\Doctors\\{doctorID}.txt", $"{doctorID}|{id}|{description}\n");
+                }
+                // If not create a new file with the patient/doctor ID as the filename and write the appointment details to it
+                else if (!File.Exists($"DB\\Appointments\\Patients\\{id}.txt") && !File.Exists($"DB\\Appointments\\Doctors\\{doctorID}.txt"))
+                {
+                    File.WriteAllText($"DB\\Appointments\\Patients\\{id}.txt", $"{doctorID}|{id}|{description}\n");
+                    File.WriteAllText($"DB\\Appointments\\Doctors\\{doctorID}.txt", $"{doctorID}|{id}|{description}\n");
+                }
+
+                Console.WriteLine("The appointment has been booked successfully");
+            }
+            //If no doctor is assigned to the current patient, then assign a doctor first, this will occur if a new patient is created by admin.
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine($"{fullName} are not registered with any doctor! Please choose which doctor you would like to register with");
+                //[TODO]: Assign doctor
+                //Read all current doctors within Doctors directory
+                string[] doctorFiles = Directory.GetFiles("DB\\Doctors");
+                //List all doctors
+                foreach (string doctorFile in doctorFiles)
+                {
+                    string[] doctorData = File.ReadAllText(doctorFile).Split(';');
+                    Doctor d = new Doctor(doctorData[0], doctorData[1], doctorData[2], doctorData[3], doctorData[4], doctorData[5], "Doctor");
+                    Console.WriteLine(d);
+                }
+                //Prompt user to enter the ID of the doctor they would like to register with
+                Console.WriteLine();
+                try
+                {
+                    Console.Write("Please chooose a doctor: ");
+                    int chosenOption = int.Parse(Console.ReadLine() ?? "0");
+                    chosenOption -= 1;
+                    if (chosenOption > doctorFiles.Length || chosenOption < 0)
+                    {
+                        throw new Exception("Invalid option, press any key to try again");
+                    }
+                    else
+                    {
+                        //find the doctor ID from the doctorFiles array
+                        string doctorID = doctorFiles[chosenOption].Split('\\').Last().Split('.').First();
+                        //Write the doctor ID to the patient's file in RegisteredDoctors directory
+                        File.WriteAllText($"DB\\Patients\\RegisteredDoctors\\{id}.txt", doctorID.ToString());
+                        // Also add the patient ID to the RegisteredPatients
+                        if (File.Exists($"DB\\Doctors\\RegisteredPatients\\{doctorID}.txt"))
+                        {
+                            File.AppendAllText($"DB\\Doctors\\RegisteredPatients\\{doctorID}.txt", $"\n{id}");
+                        }
+                        else
+                        {
+                            File.WriteAllText($"DB\\Doctors\\RegisteredPatients\\{doctorID}.txt", $"{id}");
+                        }
+                        Console.WriteLine("Doctor assigned successfully");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.ReadKey();
+                    CreateBooking();
+                }
+            }
         }
 
         //override Menu method from User to display Patient Menu
