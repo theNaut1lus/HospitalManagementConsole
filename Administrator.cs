@@ -8,13 +8,9 @@ namespace HospitalManagementConsole
 {
     internal class Administrator : User
     {
-        private string address, email, phone;
 
-        public Administrator(string address, string email, string phone, string id, string password, string fullname, string role) : base(id, password, fullname, role)
+        public Administrator(string id, string password, string fullname, string role) : base(id, password, fullname, role)
         {
-            this.address = address;
-            this.email = email;
-            this.phone = phone;
         }
 
         public override void Menu()
