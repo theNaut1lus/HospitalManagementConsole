@@ -8,61 +8,28 @@ using System.Threading.Tasks;
 
 namespace HospitalManagementConsole
 {
-    internal static class Utils<T> where T : User
+    internal static class Utils
     {
-        private static string[] fileAccess = { "administrators", "doctors", "patients" };
-
-        private static T? userData;
-        public static T? UserData { 
-            get 
-            {
-                return userData;
-            }
-            set 
-            {
-                UserData = value;
-            }
-        }
-
-        public static T? HandleLogin(string id, string password)
+        public static void Header(string[] labels, string divider)
         {
-
-            var options = new JsonSerializerOptions { WriteIndented = true };
-
-            foreach (string file in fileAccess)
+            string header = "";
+            for (int i = 0; i < labels.Length; i++)
             {
-                string jsonText = File.ReadAllText(file + ".json");
-
-                List<T> users = JsonSerializer.Deserialize<List<T>>(jsonText, options);
-
-                foreach (T user in users)
+                if (labels[i] == "Phone")
                 {
-                    if (user.id == id && user.password == password)
-                    {
-                        userData = user;
-                        break;
-                    }
+                    header += $"{labels[i],-10}";
                 }
+                else header += $"{labels[i],-20}";
 
+                if (i != labels.Length - 1)
+                {
+                    header += " | ";
+                }
             }
+            divider = new('─', header.Length + 15);
 
-            if (userData == null)
-            {
-                Console.WriteLine("User not found");
-                return null;
-            }
-            else if (userData.id == id && userData.password == password)
-            {
-                Console.WriteLine("Login successful");
-                return userData;
-            }
-            else
-            {
-                Console.WriteLine("Invalid credentials");
-                return null;
-            }
+            Console.WriteLine(header);
+            Console.WriteLine(divider);
         }
-
-
     }
 }
