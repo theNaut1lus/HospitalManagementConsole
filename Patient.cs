@@ -168,11 +168,14 @@ namespace HospitalManagementConsole
 
                 if (string.IsNullOrEmpty(description))
                 {
-                    Console.WriteLine("Description cannot be empty, press any key to try again");
-                    Console.ReadKey();
-                    BookAppointment();
+                    Console.WriteLine("Description cannot be empty, press any key to try again, or 'e' to exit.");
+                    var info = Console.ReadKey(true).Key;
+                    if (info == ConsoleKey.E)
+                    {
+                        Menu();
+                    }
+                    else BookAppointment();
                 }
-
                 // Check if the patient/doctor already has an appointment with this doctor/patient => Append a new appointment to the file on a new line
                 if (File.Exists($"DB\\Appointments\\Patients\\{id}.txt") && File.Exists($"DB\\Appointments\\Doctors\\{doctorID}.txt"))
                 {
