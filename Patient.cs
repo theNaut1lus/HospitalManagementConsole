@@ -311,7 +311,19 @@ namespace HospitalManagementConsole
             Console.ReadKey();
         }
 
+        public override string ToString()
+        {
+            string doctorName = "";
+            if (File.Exists($"Patients\\RegisteredDoctors\\{id}.txt"))
+            {
+                // Get the registered doctor
+                string[] registeredDoctor = File.ReadAllLines($"Patients\\RegisteredDoctors\\{id}.txt");
+                string[] doctor = File.ReadAllLines($"Doctors\\{registeredDoctor[0]}.txt");
+                doctorName = doctor[0].Split(';')[2];
+            }
 
+            return $"{fullName,-20} | {doctorName,-20} | {email,-20} | {phone,-5} | {address,-20}";
+        }
 
 
     }
