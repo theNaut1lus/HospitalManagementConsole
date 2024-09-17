@@ -317,8 +317,8 @@ namespace HospitalManagementConsole
             if (File.Exists($"DB\\Patients\\RegisteredDoctors\\{id}.txt"))
             {
                 // Get the registered doctor using the patient's ID from the RegisteredDoctors directory
-                string registeredDoctor = File.ReadAllText($"DB\\Patients\\RegisteredDoctors\\{id}.txt");
-                string[] doctor = File.ReadAllLines($"DB\\Doctors\\{registeredDoctor}.txt");
+                string registeredDoctorID = File.ReadAllText($"DB\\Patients\\RegisteredDoctors\\{id}.txt");
+                string[] doctor = File.ReadAllLines($"DB\\Doctors\\{registeredDoctorID}.txt");
                 doctorName = doctor[0].Split(';')[2];
                 return $"{fullName,-20} | {doctorName,-20} | {email,-20} | {phone,-5} | {address,-20}";
             }
