@@ -174,7 +174,6 @@ namespace HospitalManagementConsole
                 Console.ReadKey();
                 Menu();
             }
-            //[TODO] : Patient search
         }
 
         //Method to list appointments with a particular patient
@@ -192,7 +191,64 @@ namespace HospitalManagementConsole
             Console.WriteLine();
             Console.Write("Enter the ID of the patient you would like to view appointments for: ");
 
-            string patientID = Console.ReadLine() ?? "";
+            try
+            {
+                string patientID = Console.ReadLine() ?? "";
+                //check if patient exists and is  registered patient of the doctor in patient's registered doctor directory.
+                if (File.Exists($"DB\\Patients\\{patientID}.txt"))
+                {
+                    if (File.Exists($"DB\\Patients\\RegisteredDoctors\\{patientID}.txt"))
+                    {
+                        string[] registeredDoctors = File.ReadAllLines($"DB\\Patients\\RegisteredDoctors\\{patientID}.txt");
+                        // if registeredDoctors contains the doctor's id, then the patient is assigned to the doctor.
+                        if (registeredDoctors.Contains(id))
+                        {
+                            Console.WriteLine();
+
+                            //additional processing required to format into table as per specifications
+                            string[] labelNames = { "Doctor", "Patient", "Description" };
+                            Utils.Header(labelNames, "-");
+
+                            if (File.Exists($"DB\\Appointments\\Patients\\{patientID}.txt"))
+                            {
+                                string[] appointments = File.ReadAllLines($"DB\\Appointments\\Patients\\{patientID}.txt");
+                                foreach (string appointment in appointments)
+                                {
+                                    string[] appointmentDetails = appointment.Split('|');
+                                    Appointment a = new Appointment(appointmentDetails[0], appointmentDetails[1], appointmentDetails[2]);
+                                    Console.WriteLine(a);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("No appointments for you.");
+
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Patient not assigned to you, return to menu by pressing any key");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("No patients assigned to you, return to menu by pressing any key");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Patient not found, return to menu by pressing any key");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                Console.ReadKey();
+                Menu();
+            }
 
             //[TODO] : Appointment search using patient ID
         }
