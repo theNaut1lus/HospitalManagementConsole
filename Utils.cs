@@ -10,22 +10,29 @@ namespace HospitalManagementConsole
 {
     internal static class Utils
     {
-        public static void Header(string[] labels, string divider)
+        //Using a separate method for generating header design with labels and divider values passed through.
+        public static void Header(string[] labelNames, string divider)
         {
+            //build header using labelNames string[] being passed through
             string header = "";
-            for (int i = 0; i < labels.Length; i++)
+            //loop through labelNames and add to header string
+            for (int i = 0; i < labelNames.Length; i++)
             {
-                if (labels[i] == "Phone")
+                //for 'Phone' need a smaller width, to match specifications
+                if (labelNames[i] == "Phone")
                 {
-                    header += $"{labels[i],-10}";
+                    header += $"{labelNames[i],-10}";
                 }
-                else header += $"{labels[i],-20}";
+                //rest have standard padding of 20
+                else header += $"{labelNames[i],-20}";
 
-                if (i != labels.Length - 1)
+                //add divider between labels
+                if (i != labelNames.Length - 1)
                 {
                     header += " | ";
                 }
             }
+            // Anonymous function: set a divider that will match the length of the headers
             divider = new('─', header.Length + 15);
 
             Console.WriteLine(header);
