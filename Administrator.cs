@@ -63,8 +63,65 @@ namespace HospitalManagementConsole
 
             Console.WriteLine("Please enter the ID of the doctor who's details you are checking. Or press n to return to menu");
 
-            string doctorID = Console.ReadLine() ?? "";
-            //[TODO]: Search and display a doctor
+            try
+            {
+                string doctorID = Console.ReadLine() ?? "";
+
+                //if n is entered, throw an exception to return to menu
+                if(doctorID == "n")
+                {
+                    throw new Exception("Returning to menu");
+                }
+                //Check if the doctor ID is empty or not a number, then through an exception and retry.
+                else if(doctorID == "" || Double.IsNaN(Convert.ToDouble(doctorID)))
+                {
+                    throw new Exception("Doctor ID cannot be empty, press any key to try again");
+                }
+                //Check if the doctor file exists for entered ID
+                else if (File.Exists($"DB\\Doctors\\{doctorID}.txt"))
+                {
+                    //read the file and display the details
+                    string[] doctorInfo = File.ReadAllText($"DB\\Doctors\\{doctorID}.txt").Split(';');
+                    Doctor d = new Doctor(doctorInfo[0], doctorInfo[1], doctorInfo[2], doctorInfo[3], doctorInfo[4], doctorInfo[5], "Doctor");
+                    Console.WriteLine();
+                    Console.WriteLine($"Details for {d.fullName}");
+                    Console.WriteLine();
+
+                    string[] labelNames = { "Name", "Email Address", "Phone", "Address" };
+                    Utils.Header(labelNames, "─");
+                    Console.WriteLine(d);
+                    Console.ReadKey();
+                    Menu();
+                }
+                else
+                {
+                    throw new Exception("Doctor not found, press any key to try again");
+                }
+
+            }
+            catch (Exception e)
+            {
+                if (e.Message == "Doctor not found, press any key to try again")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(e.Message);
+                    Console.ReadKey();
+                    CheckParticularDoctor();
+                }
+                else if (e.Message == "Returning to menu")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(e.Message);
+                    Console.ReadKey();
+                    Menu();
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(e.Message);
+                    CheckParticularDoctor();
+                }
+            }
         }
 
         public void ListAllPatients()
@@ -114,9 +171,66 @@ namespace HospitalManagementConsole
 
             Console.WriteLine("Please enter the ID of the patient who's details you are checking. Or press n to return to menu");
 
-            string patientID = Console.ReadLine() ?? "";
+            try
+            {
+                string patientID = Console.ReadLine() ?? "";
 
-            //[TODO] : Search and display a patient
+                //if n is entered, throw an exception to return to menu
+                if (patientID == "n")
+                {
+                    throw new Exception("Returning to menu");
+                }
+                //Check if the patient ID is empty or not a number, then through an exception and retry.
+                else if (patientID == "" || Double.IsNaN(Convert.ToDouble(patientID)))
+                {
+                    throw new Exception("Doctor ID cannot be empty, press any key to try again");
+                }
+                //Check if the patient file exists for entered ID
+                else if (File.Exists($"DB\\Patients\\{patientID}.txt"))
+                {
+                    //read the file and display the details
+                    string[] patientInfo = File.ReadAllText($"DB\\Patients\\{patientID}.txt").Split(';');
+                    Patient p = new Patient(patientInfo[0], patientInfo[1], patientInfo[2], patientInfo[3], patientInfo[4], patientInfo[5], "Patient");
+                    Console.WriteLine();
+                    Console.WriteLine($"Details for {p.fullName}");
+                    Console.WriteLine();
+
+                    string[] labelNames = { "Name", "Doctor", "Email Address", "Phone", "Address" };
+                    Utils.Header(labelNames, "─");
+                    Console.WriteLine(p);
+                    Console.ReadKey();
+                    Menu();
+                }
+                else
+                {
+                    throw new Exception("Patient not found, press any key to try again");
+                }
+
+            }
+            catch (Exception e)
+            {
+                if (e.Message == "Patient not found, press any key to try again")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(e.Message);
+                    Console.ReadKey();
+                    CheckParticularPatient();
+                }
+                else if (e.Message == "Returning to menu")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(e.Message);
+                    Console.ReadKey();
+                    Menu();
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(e.Message);
+                    Console.ReadKey();
+                    CheckParticularPatient();
+                }
+            }
         }
 
         public void AddDoctor()
