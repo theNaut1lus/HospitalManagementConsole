@@ -223,7 +223,7 @@ namespace HospitalManagementConsole
                         string doctorID = doctorFiles[chosenOption].Split('\\').Last().Split('.').First();
                         //Write the doctor ID to the patient's file in RegisteredDoctors directory
                         File.WriteAllText($"DB\\Patients\\RegisteredDoctors\\{id}.txt", doctorID.ToString());
-                        // Also add the patient ID to the RegisteredPatients
+                        // Also add the patient ID to the RegisteredPatients, a doctor can have multiple patients, but not vice-versa
                         if (File.Exists($"DB\\Doctors\\RegisteredPatients\\{doctorID}.txt"))
                         {
                             File.AppendAllText($"DB\\Doctors\\RegisteredPatients\\{doctorID}.txt", $"\n{id}");

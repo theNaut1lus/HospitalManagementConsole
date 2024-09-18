@@ -39,6 +39,7 @@ namespace HospitalManagementConsole
             string divider = new('─', tableHeaders.Length + 20);
             Console.WriteLine(tableHeaders);
             Console.WriteLine(divider);
+
             //Display the doctor's details
             Console.WriteLine(this);
             Console.ReadKey();
@@ -60,9 +61,34 @@ namespace HospitalManagementConsole
             Console.WriteLine($"Patients assigned to {fullName}");
             Console.WriteLine();
 
-            string[] labels = { "Name", "Doctor", "Email Address", "Phone", "Address" };
+            //additional processing required to format into table as per specifications
+            string[] labelNames = { "Name", "Doctor", "Email Address", "Phone", "Address" };
+            // Table header string with custom padding to acheive uniform borders
+            string tableHeaders = $"{labelNames[0],-20} | {labelNames[1],-20} | {labelNames[2],-20} | {labelNames[3],-10} | {labelNames[4],-20}";
+            // Anonymous function: set a divider that will match the length of the headers
+            string divider = new('─', tableHeaders.Length + 20);
+            Console.WriteLine(tableHeaders);
+            Console.WriteLine(divider);
 
-            //TODO: Get all patients assigned to this doctor, null if no assigned.
+            //Get all patients assigned to this doctor from RegisteredPatients directory
+            if (File.Exists($"DB\\Doctors\\RegisteredPatients\\{id}.txt"))
+            {
+                string[] patients = File.ReadAllLines($"DB\\Doctors\\RegisteredPatients\\{id}.txt");
+                foreach (string patient in patients)
+                {
+                    // for each registered patient, read their respective file and display the details
+                    string[] registeredPatient = File.ReadAllLines($"DB\\Patients\\{patient}.txt");
+                    string[] registeredPatientDetails = registeredPatient[0].Split(';');
+                    Patient p = new Patient(registeredPatientDetails[0], registeredPatientDetails[1], registeredPatientDetails[2], registeredPatientDetails[3], registeredPatientDetails[4], registeredPatientDetails[5], "Patient");
+                    Console.WriteLine(p);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No patients assigned to you.");
+            }
+            Console.ReadKey();
+            Menu();
         }
 
         //Method to display all appointments for the doctor
@@ -78,8 +104,34 @@ namespace HospitalManagementConsole
             Console.WriteLine("└──────────────────────────────────────┘");
             Console.WriteLine();
 
-            string[] labels = { "Doctor", "Patient", "Description" };
-            //[TODO] : 
+            //additional processing required to format into table as per specifications
+            string[] labelNames = { "Doctor", "Patient", "Description" };
+            // Table header string with custom padding to acheive uniform borders
+            string tableHeaders = $"{labelNames[0],-20} | {labelNames[1],-20} | {labelNames[2],-20}";
+            // Anonymous function: set a divider that will match the length of the headers
+            string divider = new('─', tableHeaders.Length + 20);
+            Console.WriteLine(tableHeaders);
+            Console.WriteLine(divider);
+
+            //Get all appointments for this doctor from Appointments directory
+
+            if (File.Exists($"DB\\Appointments\\Doctors\\{id}.txt"))
+            {
+                string[] appointments = File.ReadAllLines($"DB\\\\Appointments\\Doctors\\{id}.txt");
+                foreach (string appointment in appointments)
+                {
+                    // for each appointment within the doctor's file, display the appointment details
+                    string[] appointmentDetails = appointment.Split('|');
+                    Appointment a = new Appointment(appointmentDetails[0], appointmentDetails[1], appointmentDetails[2]);
+                    Console.WriteLine(a);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No appointments for you.");
+            }
+            Console.ReadKey();
+            Menu();
         }
 
         //Method to check a particular patient
@@ -95,7 +147,33 @@ namespace HospitalManagementConsole
             Console.WriteLine("└──────────────────────────────────────┘");
             Console.WriteLine();
             Console.Write("Enter the ID of the patient to check: ");
-            //[TODO] : Patient search
+            try
+            {
+                string patientID = Console.ReadLine() ?? "";
+                if (File.Exists($"DB\\Patients\\{patientID}.txt"))
+                {
+                    string[] patientDetails = File.ReadAllText($"DB\\Patients\\{patientID}.txt").Split(';');
+                    Console.WriteLine();
+                    string[] labelNames = { "Patient", "Doctor", "Email Address", "Phone", "Address" };
+                    Utils.Header(labelNames, "-");
+
+                    Patient p = new Patient(patientDetails[0], patientDetails[1], patientDetails[2], patientDetails[3], patientDetails[4], patientDetails[5], "Patient");
+                    Console.WriteLine(p);
+                }
+                else
+                {
+                    throw new Exception("Patient not found, return to menu by pressing any key");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                Console.ReadKey();
+                Menu();
+            }
         }
 
         //Method to list appointments with a particular patient
@@ -113,7 +191,64 @@ namespace HospitalManagementConsole
             Console.WriteLine();
             Console.Write("Enter the ID of the patient you would like to view appointments for: ");
 
-            string patientID = Console.ReadLine() ?? "";
+            try
+            {
+                string patientID = Console.ReadLine() ?? "";
+                //check if patient exists and is  registered patient of the doctor in patient's registered doctor directory.
+                if (File.Exists($"DB\\Patients\\{patientID}.txt"))
+                {
+                    if (File.Exists($"DB\\Patients\\RegisteredDoctors\\{patientID}.txt"))
+                    {
+                        string[] registeredDoctors = File.ReadAllLines($"DB\\Patients\\RegisteredDoctors\\{patientID}.txt");
+                        // if registeredDoctors contains the doctor's id, then the patient is assigned to the doctor.
+                        if (registeredDoctors.Contains(id))
+                        {
+                            Console.WriteLine();
+
+                            //additional processing required to format into table as per specifications
+                            string[] labelNames = { "Doctor", "Patient", "Description" };
+                            Utils.Header(labelNames, "-");
+
+                            if (File.Exists($"DB\\Appointments\\Patients\\{patientID}.txt"))
+                            {
+                                string[] appointments = File.ReadAllLines($"DB\\Appointments\\Patients\\{patientID}.txt");
+                                foreach (string appointment in appointments)
+                                {
+                                    string[] appointmentDetails = appointment.Split('|');
+                                    Appointment a = new Appointment(appointmentDetails[0], appointmentDetails[1], appointmentDetails[2]);
+                                    Console.WriteLine(a);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("No appointments for you.");
+
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Patient not assigned to you, return to menu by pressing any key");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("No patients assigned to you, return to menu by pressing any key");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Patient not found, return to menu by pressing any key");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                Console.ReadKey();
+                Menu();
+            }
 
             //[TODO] : Appointment search using patient ID
         }
