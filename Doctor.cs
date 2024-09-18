@@ -33,12 +33,7 @@ namespace HospitalManagementConsole
 
             //additional processing required to format into table as per specifications
             string[] labelNames = { "Name", "Email Address", "Phone", "Address" };
-            // Table header string with custom padding to acheive uniform borders
-            string tableHeaders = $"{labelNames[0],-20} | {labelNames[1],-20} | {labelNames[2],-10} | {labelNames[3],-20}";
-            // Anonymous function: set a divider that will match the length of the headers
-            string divider = new('─', tableHeaders.Length + 20);
-            Console.WriteLine(tableHeaders);
-            Console.WriteLine(divider);
+            Utils.Header(labelNames, "-");
 
             //Display the doctor's details
             Console.WriteLine(this);
@@ -63,12 +58,7 @@ namespace HospitalManagementConsole
 
             //additional processing required to format into table as per specifications
             string[] labelNames = { "Name", "Doctor", "Email Address", "Phone", "Address" };
-            // Table header string with custom padding to acheive uniform borders
-            string tableHeaders = $"{labelNames[0],-20} | {labelNames[1],-20} | {labelNames[2],-20} | {labelNames[3],-10} | {labelNames[4],-20}";
-            // Anonymous function: set a divider that will match the length of the headers
-            string divider = new('─', tableHeaders.Length + 20);
-            Console.WriteLine(tableHeaders);
-            Console.WriteLine(divider);
+            Utils.Header(labelNames, "-");
 
             //Get all patients assigned to this doctor from RegisteredPatients directory
             if (File.Exists($"DB\\Doctors\\RegisteredPatients\\{id}.txt"))
@@ -106,12 +96,7 @@ namespace HospitalManagementConsole
 
             //additional processing required to format into table as per specifications
             string[] labelNames = { "Doctor", "Patient", "Description" };
-            // Table header string with custom padding to acheive uniform borders
-            string tableHeaders = $"{labelNames[0],-20} | {labelNames[1],-20} | {labelNames[2],-20}";
-            // Anonymous function: set a divider that will match the length of the headers
-            string divider = new('─', tableHeaders.Length + 20);
-            Console.WriteLine(tableHeaders);
-            Console.WriteLine(divider);
+            Utils.Header(labelNames, "-");
 
             //Get all appointments for this doctor from Appointments directory
 

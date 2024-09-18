@@ -56,12 +56,7 @@ namespace HospitalManagementConsole
 
             //additional processing required to format into table as per specifications
             string[] labelNames = { "Name", "Email Address", "Phone", "Address" };
-            // Table header string with custom padding to acheive uniform borders
-            string tableHeaders = $"{labelNames[0],-20} | {labelNames[1],-20} | {labelNames[2],-10} | {labelNames[3],-20}";
-            // Anonymous function: set a divider that will match the length of the headers
-            string divider = new('─', tableHeaders.Length + 20);
-            Console.WriteLine(tableHeaders);
-            Console.WriteLine(divider);
+            Utils.Header(labelNames,"-");
 
             //Find and display the doctor assigned to the patient using patient's own ID
             if (File.Exists($"DB\\Patients\\RegisteredDoctors\\{id}.txt"))
@@ -105,12 +100,7 @@ namespace HospitalManagementConsole
             Console.WriteLine();
 
             string[] labelNames = { "Doctor", "Patient", "Description" };
-            // Table header string with custom padding to acheive uniform borders
-            string tableHeaders = $"{labelNames[0],-20} | {labelNames[1],-20} | {labelNames[2],-10}";
-            // Anonymous function: set a divider that will match the length of the headers
-            string divider = new('─', tableHeaders.Length + 20);
-            Console.WriteLine(tableHeaders);
-            Console.WriteLine(divider);
+            Utils.Header(labelNames, "-");
 
             if (File.Exists($"DB\\Appointments\\Patients\\{id}.txt"))
             {
@@ -142,7 +132,6 @@ namespace HospitalManagementConsole
             Console.WriteLine("│                                      │");
             Console.WriteLine("└──────────────────────────────────────┘");
 
-            //[TODO]: Create booking system
             CreateBooking();
 
             Console.ReadKey();
@@ -196,7 +185,6 @@ namespace HospitalManagementConsole
             {
                 Console.WriteLine();
                 Console.WriteLine($"{fullName} are not registered with any doctor! Please choose which doctor you would like to register with");
-                //[TODO]: Assign doctor
                 //Read all current doctors within Doctors directory
                 string[] doctorFiles = Directory.GetFiles("DB\\Doctors");
                 //List all doctors
