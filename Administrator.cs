@@ -28,8 +28,25 @@ namespace HospitalManagementConsole
             Console.WriteLine("All doctors registered to the DOTNET Hospital Management System");
             Console.WriteLine();
 
-            string[] labels = { "Name", "Email Address", "Phone", "Address" };
-            //[TODO] " List all doctors
+            string[] labelNames = { "Name", "Email Address", "Phone", "Address" };
+            Utils.Header(labelNames, "─");
+
+            //Get all files in the doctors directory
+            string[] doctorFiles = Directory.GetFiles("DB\\Doctors");
+            if (doctorFiles.Length > 0)
+            {
+                //process each doctor file
+                foreach (string doctor in doctorFiles)
+                {
+                    //Read the file and display the details
+                    string[] doctorDetails = File.ReadAllText(doctor).Split(';');
+                    Doctor d = new Doctor(doctorDetails[0], doctorDetails[1], doctorDetails[2], doctorDetails[3], doctorDetails[4], doctorDetails[5], "Doctor");
+                    Console.WriteLine(d);
+
+                }
+            }
+            Console.ReadKey();
+            Menu();
         }
 
         public void CheckParticularDoctor()
@@ -65,10 +82,22 @@ namespace HospitalManagementConsole
             Console.WriteLine("All patients registered to the DOTNET Hospital Management System");
             Console.WriteLine();
 
-            string[] labels = { "Name", "Doctor", "Email Address", "Phone", "Address" };
+            string[] labelNames = { "Name", "Doctor", "Email Address", "Phone", "Address" };
+            Utils.Header(labelNames, "─");
 
-            //no id search, just run through each patient file and list them.
-            //[TODO] : List all patients
+            string[] patientFiles = Directory.GetFiles("DB\\Patients");
+            if (patientFiles.Length > 0)
+            {
+                foreach (string patient in patientFiles)
+                {
+                    string[] patientDetails = File.ReadAllText(patient).Split(';');
+                    Patient p = new Patient(patientDetails[0], patientDetails[1], patientDetails[2], patientDetails[3], patientDetails[4], patientDetails[5], "Patient");
+                    Console.WriteLine(p);
+
+                }
+            }
+            Console.ReadKey();
+            Menu();
         }
 
         public void CheckParticularPatient()

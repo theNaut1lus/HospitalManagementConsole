@@ -315,7 +315,7 @@ namespace HospitalManagementConsole
             }
             else
             {
-                return $"{fullName,-20} | {email,-20} | {phone,-5} | {address,-20}";
+                return $"{fullName,-20} | {"", -20} | {email,-20} | {phone,-5} | {address,-20}";
             }
         }
 
