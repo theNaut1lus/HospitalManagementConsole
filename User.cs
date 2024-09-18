@@ -59,5 +59,22 @@ namespace HospitalManagementConsole
 
         public abstract void Menu();
 
-    }
+        //User base class destructor doing garbage collection
+        ~User() 
+        {
+            switch (role)
+            {
+                //depending on role, ensure that current logged on user has a file created in the DB, otherwise create a file and write it's contents
+                //check if file exists in respective DB, if doesnt then create before object is destroyed.
+                case "Patient":
+                    break;
+                case "Doctor":
+                    break;
+                case "Administrator":
+
+                default:
+                    throw new Exception("Invalid Role");
+            }
+
+        }
 }
