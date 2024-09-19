@@ -249,6 +249,8 @@ namespace HospitalManagementConsole
             Console.WriteLine("Registering a new doctor with the DOTNET Hospital Management System");
             Console.WriteLine();
 
+            
+            //Dictionary to store doctor details initially to be entered via console, easier to loop, manage.
             Dictionary<string, string> doctorDetails = new Dictionary<string, string>()
             {
                 {"Password", ""},
@@ -265,16 +267,21 @@ namespace HospitalManagementConsole
 
             try
             {
+                //Loop through each detail in the dictionary and ask for input, if empty throw an exception and retry.
                 foreach (KeyValuePair<string, string> detail in doctorDetails)
                 {
+                    //Ask for input, input name from dictionary key
                     Console.WriteLine($"Please enter the {detail.Key}");
+                    //store input in dictionary value
                     doctorDetails[detail.Key] = Console.ReadLine() ?? "";
+                    //if null or empty, throw exception
                     if (string.IsNullOrEmpty(doctorDetails[detail.Key]))
                     {
                         throw new Exception($"{detail.Key} cannot be empty, press any key to try again");
                     }
                 }
 
+                //Generate a random doctor ID, check if it exists, if it does, keep generating a new one, until found a unique.
                 Random randomGenerator = new Random();
                 int doctorID = randomGenerator.Next(10000, 99999);
                 while (File.Exists($"DB\\Doctors\\{doctorID}.txt"))
@@ -282,12 +289,18 @@ namespace HospitalManagementConsole
                     doctorID = randomGenerator.Next(10000, 99999);
                 }
 
+                //Create an address string from the street number, street, city, state and postcode.
                 string address = $"{doctorDetails["Street Number"]} {doctorDetails["Street"]}, {doctorDetails["City"]} {doctorDetails["State"]} {doctorDetails["Postcode"]}";
+                //Create a full name string from the first name and last name.
+                string fullName = doctorDetails["First Name"] + " " + doctorDetails["Last Name"];
 
+                //Create a new doctor object with the entered doctor ID, password, full name, address, email, phone and role.
                 Doctor d = new Doctor(doctorID.ToString(), doctorDetails["Password"], doctorDetails["First Name"] + " " + doctorDetails["Last Name"],address ,doctorDetails["Email"], doctorDetails["Phone"], "Doctor");
 
+                //Write the doctor object to a file with the doctor ID as the file name. using the ToSave method to save the object in a string format with ; delimitar.
                 File.WriteAllText($"DB\\Doctors\\{doctorID}.txt", d.ToSave());
 
+                //Double check to ensure file was created, if so, display a success message and return to menu.
                 if (File.Exists($"DB\\Doctors\\{doctorID}.txt"))
                 {
                     Console.WriteLine();
@@ -301,6 +314,7 @@ namespace HospitalManagementConsole
                 }
 
             }
+            //generic exception catch, to display the error message and retry the method.
             catch (Exception e)
             {
                 Console.WriteLine();
@@ -308,8 +322,6 @@ namespace HospitalManagementConsole
                 Console.ReadKey();
                 AddDoctor();
             }
-            
-            //[TODO] : Add a doctor
         }
 
         public void AddPatient()
@@ -327,6 +339,8 @@ namespace HospitalManagementConsole
             Console.WriteLine("Registering a new patient with the DOTNET Hospital Management System");
             Console.WriteLine();
 
+            
+            //Dictionary to store doctor details initially to be entered via console, easier to loop, manage.
             Dictionary<string, string> patientDetails = new Dictionary<string, string>()
             {
                 {"Password", ""},
@@ -343,16 +357,21 @@ namespace HospitalManagementConsole
 
             try
             {
+                //Loop through each detail in the dictionary and ask for input, if empty throw an exception and retry.
                 foreach (KeyValuePair<string, string> detail in patientDetails)
                 {
+                    //Ask for input, input name from dictionary key
                     Console.WriteLine($"Please enter the {detail.Key}");
+                    //store input in dictionary value
                     patientDetails[detail.Key] = Console.ReadLine() ?? "";
+                    //if null or empty, throw exception
                     if (string.IsNullOrEmpty(patientDetails[detail.Key]))
                     {
                         throw new Exception($"{detail.Key} cannot be empty, press any key to try again");
                     }
                 }
 
+                //Generate a random doctor ID, check if it exists, if it does, keep generating a new one, until found a unique.
                 Random randomGenerator = new Random();
                 int patientID = randomGenerator.Next(10000, 99999);
                 while (File.Exists($"DB\\Patients\\{patientID}.txt"))
@@ -360,12 +379,18 @@ namespace HospitalManagementConsole
                     patientID = randomGenerator.Next(10000, 99999);
                 }
 
+                //Create an address string from the street number, street, city, state and postcode.
                 string address = $"{patientDetails["Street Number"]} {patientDetails["Street"]}, {patientDetails["City"]} {patientDetails["State"]} {patientDetails["Postcode"]}";
+                //Create a full name string from the first name and last name.
+                string fullName = patientDetails["First Name"] + " " + patientDetails["Last Name"];
 
-                Patient p = new Patient(patientID.ToString(), patientDetails["Password"], patientDetails["First Name"] + " " + patientDetails["Last Name"], address, patientDetails["Email"], patientDetails["Phone"], "Patient");
+                //Create a new patient object with the entered patient ID, password, full name, address, email, phone and role.
+                Patient p = new Patient(patientID.ToString(), patientDetails["Password"], fullName, address, patientDetails["Email"], patientDetails["Phone"], "Patient");
 
+                //Write the doctor object to a file with the doctor ID as the file name. using the ToSave method to save the object in a string format with ; delimitar.
                 File.WriteAllText($"DB\\Patients\\{patientID}.txt", p.ToSave());
 
+                //Double check to ensure file was created, if so, display a success message and return to menu.
                 if (File.Exists($"DB\\Patients\\{patientID}.txt"))
                 {
                     Console.WriteLine();
@@ -440,7 +465,7 @@ namespace HospitalManagementConsole
                     case ConsoleKey.D7:
                     case ConsoleKey.NumPad7:
                         Console.Clear();
-                        //[TODO]: find a way to go back to main menu
+                        Program.Main([]);
                         break;
                     case ConsoleKey.D8:
                     case ConsoleKey.NumPad8:
