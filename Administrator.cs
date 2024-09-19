@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -63,8 +64,65 @@ namespace HospitalManagementConsole
 
             Console.WriteLine("Please enter the ID of the doctor who's details you are checking. Or press n to return to menu");
 
-            string doctorID = Console.ReadLine() ?? "";
-            //[TODO]: Search and display a doctor
+            try
+            {
+                string doctorID = Console.ReadLine() ?? "";
+
+                //if n is entered, throw an exception to return to menu
+                if(doctorID == "n")
+                {
+                    throw new Exception("Returning to menu");
+                }
+                //Check if the doctor ID is empty or not a number, then through an exception and retry.
+                else if(doctorID == "" || Double.IsNaN(Convert.ToDouble(doctorID)))
+                {
+                    throw new Exception("Doctor ID cannot be empty, press any key to try again");
+                }
+                //Check if the doctor file exists for entered ID
+                else if (File.Exists($"DB\\Doctors\\{doctorID}.txt"))
+                {
+                    //read the file and display the details
+                    string[] doctorInfo = File.ReadAllText($"DB\\Doctors\\{doctorID}.txt").Split(';');
+                    Doctor d = new Doctor(doctorInfo[0], doctorInfo[1], doctorInfo[2], doctorInfo[3], doctorInfo[4], doctorInfo[5], "Doctor");
+                    Console.WriteLine();
+                    Console.WriteLine($"Details for {d.fullName}");
+                    Console.WriteLine();
+
+                    string[] labelNames = { "Name", "Email Address", "Phone", "Address" };
+                    Utils.Header(labelNames, "─");
+                    Console.WriteLine(d);
+                    Console.ReadKey();
+                    Menu();
+                }
+                else
+                {
+                    throw new Exception("Doctor not found, press any key to try again");
+                }
+
+            }
+            catch (Exception e)
+            {
+                if (e.Message == "Doctor not found, press any key to try again")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(e.Message);
+                    Console.ReadKey();
+                    CheckParticularDoctor();
+                }
+                else if (e.Message == "Returning to menu")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(e.Message);
+                    Console.ReadKey();
+                    Menu();
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(e.Message);
+                    CheckParticularDoctor();
+                }
+            }
         }
 
         public void ListAllPatients()
@@ -114,9 +172,66 @@ namespace HospitalManagementConsole
 
             Console.WriteLine("Please enter the ID of the patient who's details you are checking. Or press n to return to menu");
 
-            string patientID = Console.ReadLine() ?? "";
+            try
+            {
+                string patientID = Console.ReadLine() ?? "";
 
-            //[TODO] : Search and display a patient
+                //if n is entered, throw an exception to return to menu
+                if (patientID == "n")
+                {
+                    throw new Exception("Returning to menu");
+                }
+                //Check if the patient ID is empty or not a number, then through an exception and retry.
+                else if (patientID == "" || Double.IsNaN(Convert.ToDouble(patientID)))
+                {
+                    throw new Exception("Doctor ID cannot be empty, press any key to try again");
+                }
+                //Check if the patient file exists for entered ID
+                else if (File.Exists($"DB\\Patients\\{patientID}.txt"))
+                {
+                    //read the file and display the details
+                    string[] patientInfo = File.ReadAllText($"DB\\Patients\\{patientID}.txt").Split(';');
+                    Patient p = new Patient(patientInfo[0], patientInfo[1], patientInfo[2], patientInfo[3], patientInfo[4], patientInfo[5], "Patient");
+                    Console.WriteLine();
+                    Console.WriteLine($"Details for {p.fullName}");
+                    Console.WriteLine();
+
+                    string[] labelNames = { "Name", "Doctor", "Email Address", "Phone", "Address" };
+                    Utils.Header(labelNames, "─");
+                    Console.WriteLine(p);
+                    Console.ReadKey();
+                    Menu();
+                }
+                else
+                {
+                    throw new Exception("Patient not found, press any key to try again");
+                }
+
+            }
+            catch (Exception e)
+            {
+                if (e.Message == "Patient not found, press any key to try again")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(e.Message);
+                    Console.ReadKey();
+                    CheckParticularPatient();
+                }
+                else if (e.Message == "Returning to menu")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(e.Message);
+                    Console.ReadKey();
+                    Menu();
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(e.Message);
+                    Console.ReadKey();
+                    CheckParticularPatient();
+                }
+            }
         }
 
         public void AddDoctor()
@@ -134,7 +249,79 @@ namespace HospitalManagementConsole
             Console.WriteLine("Registering a new doctor with the DOTNET Hospital Management System");
             Console.WriteLine();
 
-            //[TODO] : Add a doctor
+            
+            //Dictionary to store doctor details initially to be entered via console, easier to loop, manage.
+            Dictionary<string, string> doctorDetails = new Dictionary<string, string>()
+            {
+                {"Password", ""},
+                {"First Name", ""},
+                {"Last Name", ""},
+                {"Email", ""},
+                {"Phone", ""},
+                {"Street Number", "" },
+                {"Street", "" },
+                {"City", "" },
+                {"State", "" },
+                {"Postcode", "" }
+            };
+
+            try
+            {
+                //Loop through each detail in the dictionary and ask for input, if empty throw an exception and retry.
+                foreach (KeyValuePair<string, string> detail in doctorDetails)
+                {
+                    //Ask for input, input name from dictionary key
+                    Console.WriteLine($"Please enter the {detail.Key}");
+                    //store input in dictionary value
+                    doctorDetails[detail.Key] = Console.ReadLine() ?? "";
+                    //if null or empty, throw exception
+                    if (string.IsNullOrEmpty(doctorDetails[detail.Key]))
+                    {
+                        throw new Exception($"{detail.Key} cannot be empty, press any key to try again");
+                    }
+                }
+
+                //Generate a random doctor ID, check if it exists, if it does, keep generating a new one, until found a unique.
+                Random randomGenerator = new Random();
+                int doctorID = randomGenerator.Next(10000, 99999);
+                while (File.Exists($"DB\\Doctors\\{doctorID}.txt"))
+                {
+                    doctorID = randomGenerator.Next(10000, 99999);
+                }
+
+                //Create an address string from the street number, street, city, state and postcode.
+                string address = $"{doctorDetails["Street Number"]} {doctorDetails["Street"]}, {doctorDetails["City"]} {doctorDetails["State"]} {doctorDetails["Postcode"]}";
+                //Create a full name string from the first name and last name.
+                string fullName = doctorDetails["First Name"] + " " + doctorDetails["Last Name"];
+
+                //Create a new doctor object with the entered doctor ID, password, full name, address, email, phone and role.
+                Doctor d = new Doctor(doctorID.ToString(), doctorDetails["Password"], doctorDetails["First Name"] + " " + doctorDetails["Last Name"],address ,doctorDetails["Email"], doctorDetails["Phone"], "Doctor");
+
+                //Write the doctor object to a file with the doctor ID as the file name. using the ToSave method to save the object in a string format with ; delimitar.
+                File.WriteAllText($"DB\\Doctors\\{doctorID}.txt", d.ToSave());
+
+                //Double check to ensure file was created, if so, display a success message and return to menu.
+                if (File.Exists($"DB\\Doctors\\{doctorID}.txt"))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"Dr. {d.fullName} added to the system!");
+                    Console.ReadKey();
+                    Menu();
+                }
+                else
+                {
+                    throw new Exception("Doctor not added, press any key to try again");
+                }
+
+            }
+            //generic exception catch, to display the error message and retry the method.
+            catch (Exception e)
+            {
+                Console.WriteLine();
+                Console.WriteLine(e.Message);
+                Console.ReadKey();
+                AddDoctor();
+            }
         }
 
         public void AddPatient()
@@ -152,7 +339,79 @@ namespace HospitalManagementConsole
             Console.WriteLine("Registering a new patient with the DOTNET Hospital Management System");
             Console.WriteLine();
 
-            //[TODO] : Add a patient
+            
+            //Dictionary to store doctor details initially to be entered via console, easier to loop, manage.
+            Dictionary<string, string> patientDetails = new Dictionary<string, string>()
+            {
+                {"Password", ""},
+                {"First Name", ""},
+                {"Last Name", ""},
+                {"Email", ""},
+                {"Phone", ""},
+                {"Street Number", "" },
+                {"Street", "" },
+                {"City", "" },
+                {"State", "" },
+                {"Postcode", "" }
+            };
+
+            try
+            {
+                //Loop through each detail in the dictionary and ask for input, if empty throw an exception and retry.
+                foreach (KeyValuePair<string, string> detail in patientDetails)
+                {
+                    //Ask for input, input name from dictionary key
+                    Console.WriteLine($"Please enter the {detail.Key}");
+                    //store input in dictionary value
+                    patientDetails[detail.Key] = Console.ReadLine() ?? "";
+                    //if null or empty, throw exception
+                    if (string.IsNullOrEmpty(patientDetails[detail.Key]))
+                    {
+                        throw new Exception($"{detail.Key} cannot be empty, press any key to try again");
+                    }
+                }
+
+                //Generate a random doctor ID, check if it exists, if it does, keep generating a new one, until found a unique.
+                Random randomGenerator = new Random();
+                int patientID = randomGenerator.Next(10000, 99999);
+                while (File.Exists($"DB\\Patients\\{patientID}.txt"))
+                {
+                    patientID = randomGenerator.Next(10000, 99999);
+                }
+
+                //Create an address string from the street number, street, city, state and postcode.
+                string address = $"{patientDetails["Street Number"]} {patientDetails["Street"]}, {patientDetails["City"]} {patientDetails["State"]} {patientDetails["Postcode"]}";
+                //Create a full name string from the first name and last name.
+                string fullName = patientDetails["First Name"] + " " + patientDetails["Last Name"];
+
+                //Create a new patient object with the entered patient ID, password, full name, address, email, phone and role.
+                Patient p = new Patient(patientID.ToString(), patientDetails["Password"], fullName, address, patientDetails["Email"], patientDetails["Phone"], "Patient");
+
+                //Write the doctor object to a file with the doctor ID as the file name. using the ToSave method to save the object in a string format with ; delimitar.
+                File.WriteAllText($"DB\\Patients\\{patientID}.txt", p.ToSave());
+
+                //Double check to ensure file was created, if so, display a success message and return to menu.
+                if (File.Exists($"DB\\Patients\\{patientID}.txt"))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"{p.fullName} added to the system!");
+                    Console.ReadKey();
+                    Menu();
+                }
+                else
+                {
+                    throw new Exception("Patient not added, press any key to try again");
+                }
+
+            }
+            //generic exception catch, to display the error message and retry the method.
+            catch (Exception e)
+            {
+                Console.WriteLine();
+                Console.WriteLine(e.Message);
+                Console.ReadKey();
+                AddPatient();
+            }
         }
 
         public override void Menu()
@@ -207,7 +466,7 @@ namespace HospitalManagementConsole
                     case ConsoleKey.D7:
                     case ConsoleKey.NumPad7:
                         Console.Clear();
-                        //[TODO]: find a way to go back to main menu
+                        Program.Main([]);
                         break;
                     case ConsoleKey.D8:
                     case ConsoleKey.NumPad8:

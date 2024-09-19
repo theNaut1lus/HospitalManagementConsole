@@ -319,5 +319,10 @@ namespace HospitalManagementConsole
             return $"{fullName,-20} | {email,-20} | {phone,-5} | {address,-20}";
         }
 
+        public string ToSave()
+        {
+            return $"{id};{password};{fullName};{address};{email};{phone}";
+        }
+
     }
 }
