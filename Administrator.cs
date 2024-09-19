@@ -404,6 +404,7 @@ namespace HospitalManagementConsole
                 }
 
             }
+            //generic exception catch, to display the error message and retry the method.
             catch (Exception e)
             {
                 Console.WriteLine();
