@@ -319,6 +319,12 @@ namespace HospitalManagementConsole
             }
         }
 
+        public string ToSave()
+        {
+
+           return $"{id};{password};{fullName};{address};{email};{phone}";
+        }
+
 
     }
 }

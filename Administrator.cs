@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -248,6 +249,66 @@ namespace HospitalManagementConsole
             Console.WriteLine("Registering a new doctor with the DOTNET Hospital Management System");
             Console.WriteLine();
 
+            Dictionary<string, string> doctorDetails = new Dictionary<string, string>()
+            {
+                {"Password", ""},
+                {"First Name", ""},
+                {"Last Name", ""},
+                {"Email", ""},
+                {"Phone", ""},
+                {"Street Number", "" },
+                {"Street", "" },
+                {"City", "" },
+                {"State", "" },
+                {"Postcode", "" }
+            };
+
+            try
+            {
+                foreach (KeyValuePair<string, string> detail in doctorDetails)
+                {
+                    Console.WriteLine($"Please enter the {detail.Key}");
+                    doctorDetails[detail.Key] = Console.ReadLine() ?? "";
+                    if (string.IsNullOrEmpty(doctorDetails[detail.Key]))
+                    {
+                        throw new Exception($"{detail.Key} cannot be empty, press any key to try again");
+                    }
+                }
+
+                Random randomGenerator = new Random();
+                int doctorID = randomGenerator.Next(10000, 99999);
+                while (File.Exists($"DB\\Doctors\\{doctorID}.txt"))
+                {
+                    doctorID = randomGenerator.Next(10000, 99999);
+                }
+
+                string address = $"{doctorDetails["Street Number"]} {doctorDetails["Street"]}, {doctorDetails["City"]} {doctorDetails["State"]} {doctorDetails["Postcode"]}";
+
+                Doctor d = new Doctor(doctorID.ToString(), doctorDetails["Password"], doctorDetails["First Name"] + " " + doctorDetails["Last Name"],address ,doctorDetails["Email"], doctorDetails["Phone"], "Doctor");
+
+                File.WriteAllText($"DB\\Doctors\\{doctorID}.txt", d.ToSave());
+
+                if (File.Exists($"DB\\Doctors\\{doctorID}.txt"))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"Dr. {d.fullName} added to the system!");
+                    Console.ReadKey();
+                    Menu();
+                }
+                else
+                {
+                    throw new Exception("Doctor not added, press any key to try again");
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine();
+                Console.WriteLine(e.Message);
+                Console.ReadKey();
+                AddDoctor();
+            }
+            
             //[TODO] : Add a doctor
         }
 
@@ -266,7 +327,65 @@ namespace HospitalManagementConsole
             Console.WriteLine("Registering a new patient with the DOTNET Hospital Management System");
             Console.WriteLine();
 
-            //[TODO] : Add a patient
+            Dictionary<string, string> patientDetails = new Dictionary<string, string>()
+            {
+                {"Password", ""},
+                {"First Name", ""},
+                {"Last Name", ""},
+                {"Email", ""},
+                {"Phone", ""},
+                {"Street Number", "" },
+                {"Street", "" },
+                {"City", "" },
+                {"State", "" },
+                {"Postcode", "" }
+            };
+
+            try
+            {
+                foreach (KeyValuePair<string, string> detail in patientDetails)
+                {
+                    Console.WriteLine($"Please enter the {detail.Key}");
+                    patientDetails[detail.Key] = Console.ReadLine() ?? "";
+                    if (string.IsNullOrEmpty(patientDetails[detail.Key]))
+                    {
+                        throw new Exception($"{detail.Key} cannot be empty, press any key to try again");
+                    }
+                }
+
+                Random randomGenerator = new Random();
+                int patientID = randomGenerator.Next(10000, 99999);
+                while (File.Exists($"DB\\Patients\\{patientID}.txt"))
+                {
+                    patientID = randomGenerator.Next(10000, 99999);
+                }
+
+                string address = $"{patientDetails["Street Number"]} {patientDetails["Street"]}, {patientDetails["City"]} {patientDetails["State"]} {patientDetails["Postcode"]}";
+
+                Patient p = new Patient(patientID.ToString(), patientDetails["Password"], patientDetails["First Name"] + " " + patientDetails["Last Name"], address, patientDetails["Email"], patientDetails["Phone"], "Patient");
+
+                File.WriteAllText($"DB\\Patients\\{patientID}.txt", p.ToSave());
+
+                if (File.Exists($"DB\\Patients\\{patientID}.txt"))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"{p.fullName} added to the system!");
+                    Console.ReadKey();
+                    Menu();
+                }
+                else
+                {
+                    throw new Exception("Patient not added, press any key to try again");
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine();
+                Console.WriteLine(e.Message);
+                Console.ReadKey();
+                AddPatient();
+            }
         }
 
         public override void Menu()
