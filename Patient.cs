@@ -78,7 +78,7 @@ namespace HospitalManagementConsole
             }
             else
             {
-                Console.WriteLine("Patient not found");
+                Console.WriteLine("No doctor assigned");
             }
             Console.ReadKey();
             Menu();
@@ -184,6 +184,19 @@ namespace HospitalManagementConsole
                 }
 
                 Console.WriteLine("The appointment has been booked successfully");
+
+                //send an email to the patient to confirm the appointment
+                string subject = "Appointment Confirmation";
+                string body = $"Dear {fullName},\n\nYour appointment with Dr. {doctorData[2]} has been successfully booked.\n\nDescription: {description}\n\nRegards,\nHospital Management System";
+                //if sendemail returns a string with OK in it, then the email was sent successfully, otherwise print out email unsuccessful but still book appointment
+                if (Utils.SendEmail(fullName, email, subject, body).Contains("OK"))
+                {
+                    Console.WriteLine("An email has been sent to confirm the appointment");
+                }
+                else
+                {
+                    Console.WriteLine("Email was not sent successfully");
+                }
             }
             //If no doctor is assigned to the current patient, then assign a doctor first, this will occur if a new patient is created by admin.
             else

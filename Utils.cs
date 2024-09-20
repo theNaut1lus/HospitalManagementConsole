@@ -6,6 +6,11 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
+//MailKit external Package to perform Email outs
+using MailKit.Net.Smtp;
+using MimeKit;
+using MailKit;
+
 namespace HospitalManagementConsole
 {
     internal static class Utils
@@ -70,5 +75,44 @@ namespace HospitalManagementConsole
                     return true;
             }
         }
+
+        //build a static method for sending emails
+        public static string SendEmail(string name, string emailAddress, string subject, string body)
+        {
+            var from = "sidakaulakh@gmail.com";
+            //create a new email message
+            var message = new MimeMessage();
+            //set the sender
+            message.From.Add(new MailboxAddress("Hospital Management System", from));
+            //set the recipient
+            message.To.Add(new MailboxAddress(name, emailAddress));
+            //set the subject
+            message.Subject = subject;
+            //set the body
+            message.Body = new TextPart("plain")
+            {
+                Text = body
+            };
+
+            //Extract password from .secret text file in the root directory of the project
+            string password = System.IO.File.ReadAllText("..\\..\\..\\.secret");
+
+
+
+
+            using (var client = new SmtpClient())
+            {
+                //connect to the smtp server
+                client.Connect("smtp.gmail.com", 587, false);
+                //authenticate with the server
+                client.Authenticate("sidakaulakh@gmail.com", password);
+                //send the email
+                var response = client.Send(message);
+                //disconnect from the server
+                client.Disconnect(true);
+                return response;
+            }
+        }
     }
 }
+//ifgo bsrm cykz liuz

@@ -8,7 +8,8 @@ namespace HospitalManagementConsole
 {
     internal class Login
     {
-        private string id, password;
+        //Making fields nullable to avoid null reference exceptions in case of no input
+        private string? id, password;
 
         public void LoginMenu()
         {
