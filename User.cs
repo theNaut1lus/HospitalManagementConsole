@@ -59,5 +59,12 @@ namespace HospitalManagementConsole
 
         public abstract void Menu();
 
+        ~User()
+        {
+            Console.WriteLine("User object destroyed and clearing memory");
+            GC.Collect();
+
+        }
+
     }
 }

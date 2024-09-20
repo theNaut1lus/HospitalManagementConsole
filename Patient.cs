@@ -78,7 +78,7 @@ namespace HospitalManagementConsole
             }
             else
             {
-                Console.WriteLine("Patient not found");
+                Console.WriteLine("No doctor assigned");
             }
             Console.ReadKey();
             Menu();
@@ -165,20 +165,38 @@ namespace HospitalManagementConsole
                     }
                     else BookAppointment();
                 }
-                // Check if the patient/doctor already has an appointment with this doctor/patient => Append a new appointment to the file on a new line
+
+                //create a new appointment object with the entered details
+                Appointment a = new Appointment(doctorID, id, description);
+
+
+                // Check if the patient/doctor already has an appointment with this doctor/patient => Append a new appointment to the files on a new line using ToSave() method
                 if (File.Exists($"DB\\Appointments\\Patients\\{id}.txt") && File.Exists($"DB\\Appointments\\Doctors\\{doctorID}.txt"))
                 {
-                    File.AppendAllText($"DB\\Appointments\\Patients\\{id}.txt", $"{doctorID}|{id}|{description}\n");
-                    File.AppendAllText($"DB\\Appointments\\Doctors\\{doctorID}.txt", $"{doctorID}|{id}|{description}\n");
+                    File.AppendAllText($"DB\\Appointments\\Patients\\{id}.txt", a.ToSave());
+                    File.AppendAllText($"DB\\Appointments\\Doctors\\{doctorID}.txt", a.ToSave());
                 }
-                // If not create a new file with the patient/doctor ID as the filename and write the appointment details to it
+                // If not create a new file with the patient/doctor ID as the filename and write the appointment details to it using ToSave() method
                 else if (!File.Exists($"DB\\Appointments\\Patients\\{id}.txt") && !File.Exists($"DB\\Appointments\\Doctors\\{doctorID}.txt"))
                 {
-                    File.WriteAllText($"DB\\Appointments\\Patients\\{id}.txt", $"{doctorID}|{id}|{description}\n");
-                    File.WriteAllText($"DB\\Appointments\\Doctors\\{doctorID}.txt", $"{doctorID}|{id}|{description}\n");
+                    File.WriteAllText($"DB\\Appointments\\Patients\\{id}.txt", a.ToSave());
+                    File.WriteAllText($"DB\\Appointments\\Doctors\\{doctorID}.txt", a.ToSave());
                 }
 
                 Console.WriteLine("The appointment has been booked successfully");
+
+                //send an email to the patient to confirm the appointment
+                string subject = "Appointment Confirmation";
+                string body = $"Dear {fullName},\n\nYour appointment with Dr. {doctorData[2]} has been successfully booked.\n\nDescription: {description}\n\nRegards,\nHospital Management System";
+                //if sendemail returns a string with OK in it, then the email was sent successfully, otherwise print out email unsuccessful but still book appointment
+                if (Utils.SendEmail(fullName, email, subject, body).Contains("OK"))
+                {
+                    Console.WriteLine("An email has been sent to confirm the appointment");
+                }
+                else
+                {
+                    Console.WriteLine("Email was not sent successfully");
+                }
             }
             //If no doctor is assigned to the current patient, then assign a doctor first, this will occur if a new patient is created by admin.
             else
@@ -325,6 +343,11 @@ namespace HospitalManagementConsole
            return $"{id};{password};{fullName};{address};{email};{phone}";
         }
 
+        ~Patient()
+        {
+            Console.WriteLine("Patient object destroyed and clearing memory");
+            GC.Collect();
+        }
 
     }
 }

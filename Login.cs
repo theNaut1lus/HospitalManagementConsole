@@ -8,7 +8,8 @@ namespace HospitalManagementConsole
 {
     internal class Login
     {
-        private string id, password;
+        //Making fields nullable to avoid null reference exceptions in case of no input
+        private string? id, password;
 
         public void LoginMenu()
         {
@@ -23,9 +24,15 @@ namespace HospitalManagementConsole
 
             Console.Write("ID: ");
             id = Console.ReadLine() ?? "";
+            if(!Utils.ValidateInput(id, "id"))
+            {
+                Console.WriteLine("Invalid ID format, press any key to try again");
+                Console.ReadKey();
+                Console.Clear();
+                LoginMenu();
+            }
             Console.Write("Password: ");
             password = EnterPassword();
-            //Console.WriteLine("{0} {1}", id, password); //temp
 
             HandleLogin();
 
