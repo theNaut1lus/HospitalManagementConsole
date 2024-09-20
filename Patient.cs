@@ -165,17 +165,22 @@ namespace HospitalManagementConsole
                     }
                     else BookAppointment();
                 }
-                // Check if the patient/doctor already has an appointment with this doctor/patient => Append a new appointment to the file on a new line
+
+                //create a new appointment object with the entered details
+                Appointment a = new Appointment(doctorID, id, description);
+
+
+                // Check if the patient/doctor already has an appointment with this doctor/patient => Append a new appointment to the files on a new line using ToSave() method
                 if (File.Exists($"DB\\Appointments\\Patients\\{id}.txt") && File.Exists($"DB\\Appointments\\Doctors\\{doctorID}.txt"))
                 {
-                    File.AppendAllText($"DB\\Appointments\\Patients\\{id}.txt", $"{doctorID}|{id}|{description}\n");
-                    File.AppendAllText($"DB\\Appointments\\Doctors\\{doctorID}.txt", $"{doctorID}|{id}|{description}\n");
+                    File.AppendAllText($"DB\\Appointments\\Patients\\{id}.txt", a.ToSave());
+                    File.AppendAllText($"DB\\Appointments\\Doctors\\{doctorID}.txt", a.ToSave());
                 }
-                // If not create a new file with the patient/doctor ID as the filename and write the appointment details to it
+                // If not create a new file with the patient/doctor ID as the filename and write the appointment details to it using ToSave() method
                 else if (!File.Exists($"DB\\Appointments\\Patients\\{id}.txt") && !File.Exists($"DB\\Appointments\\Doctors\\{doctorID}.txt"))
                 {
-                    File.WriteAllText($"DB\\Appointments\\Patients\\{id}.txt", $"{doctorID}|{id}|{description}\n");
-                    File.WriteAllText($"DB\\Appointments\\Doctors\\{doctorID}.txt", $"{doctorID}|{id}|{description}\n");
+                    File.WriteAllText($"DB\\Appointments\\Patients\\{id}.txt", a.ToSave());
+                    File.WriteAllText($"DB\\Appointments\\Doctors\\{doctorID}.txt", a.ToSave());
                 }
 
                 Console.WriteLine("The appointment has been booked successfully");

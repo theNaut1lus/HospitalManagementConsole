@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -45,6 +47,11 @@ namespace HospitalManagementConsole
             string patientName = patientInfo[0].Split(';')[2];
 
             return $"{doctorName,-20} | {patientName,-20} | {description,-20}";
+        }
+        public string ToSave()
+        {
+
+            return $"{doctorID}|{patientID}|{description}\n";
         }
 
         ~Appointment()
