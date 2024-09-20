@@ -46,5 +46,12 @@ namespace HospitalManagementConsole
 
             return $"{doctorName,-20} | {patientName,-20} | {description,-20}";
         }
+
+        ~Appointment()
+        {
+            Console.WriteLine("Appointment object destroyed and clearing memory");
+            GC.Collect();
+
+        }
     }
 }

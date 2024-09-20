@@ -325,6 +325,11 @@ namespace HospitalManagementConsole
            return $"{id};{password};{fullName};{address};{email};{phone}";
         }
 
+        ~Patient()
+        {
+            Console.WriteLine("Patient object destroyed and clearing memory");
+            GC.Collect();
+        }
 
     }
 }

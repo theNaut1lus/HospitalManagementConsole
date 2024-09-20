@@ -497,6 +497,13 @@ namespace HospitalManagementConsole
             Console.ReadKey();
         }
 
+        ~Administrator()
+        {
+            Console.WriteLine("Administrator object destroyed and clearing memory");
+            GC.Collect();
+
+        }
+
 
     }
 }
