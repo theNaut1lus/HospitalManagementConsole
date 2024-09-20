@@ -38,5 +38,37 @@ namespace HospitalManagementConsole
             Console.WriteLine(header);
             Console.WriteLine(divider);
         }
+
+        //build a static method for doing validation on different types of input types such as email, id, phone, etc.
+        public static bool ValidateInput(string input, string type)
+        {
+            //switch statement to handle different types of input
+            switch (type)
+            {
+                //case for email
+                case "email":
+                    //use built in email validation
+                    try
+                    {
+                        var addr = new System.Net.Mail.MailAddress(input);
+                        return addr.Address == input;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                //case for id
+                case "id":
+                    //check if input is a valid id: type int and 5 digits long
+                    return int.TryParse(input, out _) && input.Length == 5;
+                //case for phone
+                case "phone":
+                    //check if input is a valid mobile number: type int and is 10 digits long
+                    return int.TryParse(input, out _) && input.Length == 10;
+                //default case
+                default:
+                    return false;
+            }
+        }
     }
 }
