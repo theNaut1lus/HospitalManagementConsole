@@ -73,10 +73,10 @@ namespace HospitalManagementConsole
                 {
                     throw new Exception("Returning to menu");
                 }
-                //Check if the doctor ID is empty or not a number, then through an exception and retry.
-                else if(doctorID == "" || Double.IsNaN(Convert.ToDouble(doctorID)))
+                //Validate entered doctor ID format
+                else if (!Utils.ValidateInput(doctorID, "id"))
                 {
-                    throw new Exception("Doctor ID cannot be empty, press any key to try again");
+                    throw new Exception("Entered Doctor ID is in an incorrect format, press any key to try again");
                 }
                 //Check if the doctor file exists for entered ID
                 else if (File.Exists($"DB\\Doctors\\{doctorID}.txt"))
@@ -120,6 +120,7 @@ namespace HospitalManagementConsole
                 {
                     Console.WriteLine();
                     Console.WriteLine(e.Message);
+                    Console.ReadKey();
                     CheckParticularDoctor();
                 }
             }
@@ -182,9 +183,9 @@ namespace HospitalManagementConsole
                     throw new Exception("Returning to menu");
                 }
                 //Check if the patient ID is empty or not a number, then through an exception and retry.
-                else if (patientID == "" || Double.IsNaN(Convert.ToDouble(patientID)))
+                else if (!Utils.ValidateInput(patientID, "id"))
                 {
-                    throw new Exception("Doctor ID cannot be empty, press any key to try again");
+                    throw new Exception("Entered Doctor ID is in an incorrect format, press any key to try again");
                 }
                 //Check if the patient file exists for entered ID
                 else if (File.Exists($"DB\\Patients\\{patientID}.txt"))
@@ -279,6 +280,11 @@ namespace HospitalManagementConsole
                     {
                         throw new Exception($"{detail.Key} cannot be empty, press any key to try again");
                     }
+                    //Check if email/phone is in correct format, if not, throw exception, default to true for other inputs.
+                    else if (!Utils.ValidateInput(doctorDetails[detail.Key], detail.Key))
+                    {
+                        throw new Exception("Invalid format, press any key to try again");
+                    }
                 }
 
                 //Generate a random doctor ID, check if it exists, if it does, keep generating a new one, until found a unique.
@@ -369,9 +375,14 @@ namespace HospitalManagementConsole
                     {
                         throw new Exception($"{detail.Key} cannot be empty, press any key to try again");
                     }
+                    //Check if email/phone is in correct format, if not, throw exception, default to true for other inputs.
+                    else if (!Utils.ValidateInput(patientDetails[detail.Key], detail.Key))
+                    {
+                        throw new Exception("Invalid format, press any key to try again");
+                    }
                 }
 
-                //Generate a random doctor ID, check if it exists, if it does, keep generating a new one, until found a unique.
+                //Generate a random patient ID, check if it exists, if it does, keep generating a new one, until found a unique.
                 Random randomGenerator = new Random();
                 int patientID = randomGenerator.Next(10000, 99999);
                 while (File.Exists($"DB\\Patients\\{patientID}.txt"))
@@ -387,7 +398,7 @@ namespace HospitalManagementConsole
                 //Create a new patient object with the entered patient ID, password, full name, address, email, phone and role.
                 Patient p = new Patient(patientID.ToString(), patientDetails["Password"], fullName, address, patientDetails["Email"], patientDetails["Phone"], "Patient");
 
-                //Write the doctor object to a file with the doctor ID as the file name. using the ToSave method to save the object in a string format with ; delimitar.
+                //Write the patient object to a file with the patient ID as the file name. using the ToSave method to save the object in a string format with ; delimitar.
                 File.WriteAllText($"DB\\Patients\\{patientID}.txt", p.ToSave());
 
                 //Double check to ensure file was created, if so, display a success message and return to menu.

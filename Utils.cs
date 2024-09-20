@@ -46,7 +46,7 @@ namespace HospitalManagementConsole
             switch (type)
             {
                 //case for email
-                case "email":
+                case "Email":
                     //use built in email validation
                     try
                     {
@@ -62,12 +62,12 @@ namespace HospitalManagementConsole
                     //check if input is a valid id: type int and 5 digits long
                     return int.TryParse(input, out _) && input.Length == 5;
                 //case for phone
-                case "phone":
+                case "Phone":
                     //check if input is a valid mobile number: type int and is 10 digits long
                     return int.TryParse(input, out _) && input.Length == 10;
-                //default case
+                //default case, return true to skip exception
                 default:
-                    return false;
+                    return true;
             }
         }
     }

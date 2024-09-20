@@ -135,6 +135,12 @@ namespace HospitalManagementConsole
             try
             {
                 string patientID = Console.ReadLine() ?? "";
+                //validate patient ID format
+                if (!Utils.ValidateInput(patientID, "id"))
+                {
+                    throw new Exception("Invalid ID format, return to menu by pressing any key");
+                }
+                //Check if patient exists in the Patients directory
                 if (File.Exists($"DB\\Patients\\{patientID}.txt"))
                 {
                     string[] patientDetails = File.ReadAllText($"DB\\Patients\\{patientID}.txt").Split(';');
@@ -179,6 +185,11 @@ namespace HospitalManagementConsole
             try
             {
                 string patientID = Console.ReadLine() ?? "";
+                //validate patient ID format
+                if (!Utils.ValidateInput(patientID, "id"))
+                {
+                    throw new Exception("Invalid ID format, return to menu by pressing any key");
+                }
                 //check if patient exists and is  registered patient of the doctor in patient's registered doctor directory.
                 if (File.Exists($"DB\\Patients\\{patientID}.txt"))
                 {
