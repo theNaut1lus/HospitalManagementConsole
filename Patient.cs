@@ -188,8 +188,11 @@ namespace HospitalManagementConsole
                 //send an email to the patient to confirm the appointment
                 string subject = "Appointment Confirmation";
                 string body = $"Dear {fullName},\n\nYour appointment with Dr. {doctorData[2]} has been successfully booked.\n\nDescription: {description}\n\nRegards,\nHospital Management System";
+
+                //use the delegate to call the sendemail method from Utils
+                AppointmentEmail appointmentEmail = Utils.SendEmail;
                 //if sendemail returns a string with OK in it, then the email was sent successfully, otherwise print out email unsuccessful but still book appointment
-                if (Utils.SendEmail(fullName, email, subject, body).Contains("OK"))
+                if (appointmentEmail(fullName, email, subject, body).Contains("OK"))
                 {
                     Console.WriteLine("An email has been sent to confirm the appointment");
                 }

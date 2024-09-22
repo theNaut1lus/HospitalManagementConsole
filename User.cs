@@ -11,6 +11,9 @@ namespace HospitalManagementConsole
         public string id, password, fullName, role;
         public string[] options = Array.Empty<string>();
 
+        //Delegate for sending email embedded into the parent User class and therefore can be used by all child classes
+        public delegate string AppointmentEmail(string name, string email, string subject, string body);
+
         public User(string id, string password, string fullName, string role)
         {
             this.id = id;
