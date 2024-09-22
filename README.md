@@ -9,4 +9,5 @@ Setup:
 2. Open the solution in Visual Studio
 3. Build the solution
 4. Copy out the DB folder from the project root to the bin\\debug\\net8.0 folder (should co-locate with the exe file)
+5. Setup the secret file with mail app password for email notifications to work.
 5. Run the application
